@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::create('leads', function (Blueprint $table) {
             $table->id();
             $table->string('merchant_name');
-            $table->decimal('requested_amount', 15, 2)->default(0);
+            $table->decimal('requested_amount', 15, 2)->default(0)->index(); // for fast fetching
             $table->unsignedTinyInteger('lead_score')->index()->default(0); // for fast score filtering
             $table->boolean('is_assigned')->default(false)->index(); // for deal selection
             $table->timestamps();
+            $table->index('created_at'); // for time-based queries if needed
         });
     }
 

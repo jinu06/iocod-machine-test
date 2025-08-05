@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('deals', function (Blueprint $table) {
             $table->id();
             $table->foreignId('lead_id')->constrained()->onDelete('cascade');
-            $table->decimal('funded_amount', 15, 2)->default(0);
+            $table->decimal('funded_amount', 15, 2)->default(0)->index(); // for fast fetching
             $table->timestamps();
             $table->index('created_at'); // for time-based queries if needed
         });
