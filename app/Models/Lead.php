@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Lead extends Model
 {
     protected $fillable = [
-        "name",
+        "merchant_name",
         "requested_amount",
         "lead_score",
         "is_assigned"

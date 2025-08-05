@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('leads', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('merchant_name');
             $table->decimal('requested_amount', 15, 2)->default(0);
             $table->unsignedTinyInteger('lead_score')->index()->default(0); // for fast score filtering
             $table->boolean('is_assigned')->default(false)->index(); // for deal selection
