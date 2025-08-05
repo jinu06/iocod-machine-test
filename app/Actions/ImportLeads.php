@@ -15,7 +15,7 @@ class ImportLeads
             $path = storage_path('leads.json');
 
             if (!file_exists($path)) {
-                throw new \Exception('The Mock file is not found');
+                throw new \Exception('The JSON file is not found');
             }
 
             $json = file_get_contents($path);
@@ -32,13 +32,13 @@ class ImportLeads
                     'updated_at' => now(),
                 ];
 
-                if (count($batch) >= 1000) { // hopefully works for millions of record
+                if (count($batch) >= 10000) { // if the array count exceeded on 10000 insert the data and reset the array to null
                     Lead::insert($batch);
                     $batch = [];
                 }
             }
 
-            if (!empty($batch)) {
+            if (!empty($batch)) { // fallback option if $batch is lessthan 10000
                 Lead::insert($batch);
             }
 

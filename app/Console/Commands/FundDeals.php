@@ -26,7 +26,7 @@ class FundDeals extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Assign High Score Roles';
 
     /**
      * Execute the console command.
@@ -47,7 +47,7 @@ class FundDeals extends Command
             ->where("lead_score", '>=', 80)
             ->orderBy("id")
             ->chunk(10000, function ($leads) {
-                AssignHighScoreLeads::dispatch($leads);
+                AssignHighScoreLeads::dispatch($leads); // dispatch to jobs 
             });
 
         $this->info('Tha Lead Assign has been completed..');
