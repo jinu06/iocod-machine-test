@@ -8,7 +8,6 @@ class Deal extends Model
 {
     protected $fillable = [
         "lead_id",
-        "investor_id",
         "funded_amount"
     ];
 }
