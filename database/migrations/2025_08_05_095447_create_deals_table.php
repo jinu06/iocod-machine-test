@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('lead_id')->constrained()->onDelete('cascade');
             $table->decimal('funded_amount', 15, 2)->default(0);
             $table->timestamps();
-            $table->index('created_at'); // for time-based queries
+            $table->index('created_at'); // for time-based queries if needed
         });
     }
 

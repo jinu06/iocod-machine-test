@@ -41,9 +41,14 @@ class FundDeals extends Command
 
         $this->info('Import Completed..');
 
-        DB::table('leads')->where("is_assigned", false)->where("lead_score", '>=', 80)->orderBy("id")->chunkById(1000, function ($leads) {
-            AssignHighScoreLeads::dispatch($leads);
-        });
+        DB::table('leads')
+            ->select("id", "requested_amount")
+            ->where("is_assigned", 0)
+            ->where("lead_score", '>=', 80)
+            ->orderBy("id")
+            ->chunk(10000, function ($leads) {
+                AssignHighScoreLeads::dispatch($leads);
+            });
 
         $this->info('Tha Lead Assign has been completed..');
     }
