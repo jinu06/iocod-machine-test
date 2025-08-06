@@ -36,6 +36,30 @@
    The Merchant ID field is mandatory.
    The dropdown/select input for Merchant ID will show only the assigned leads from the deals table.
 
+## Used Features
+
+Back-end (Laravel)
+Action Classes – Encapsulate business logic for better code organization and reusability.
+
+Traits – Shared methods across multiple classes to reduce duplication.
+
+Artisan Commands – Custom console commands for tasks like importing mock data.
+
+Jobs – Handle queued background tasks .
+
+Eloquent ORM Relationships – Define relationships such as hasOne, hasMany, belongsTo, etc.
+
+Database Migrations – Version-controlled database schema management.
+
+Helper Functions – Custom global functions used across the application.
+
+Front-end
+HTML & CSS – Structure and styling of the interface.
+
+JavaScript / jQuery – Client-side interactivity and DOM manipulation.
+
+AJAX – Asynchronous data fetching (e.g., loading merchants or submitting forms without page reload).
+
 ## Routes Overview
 
 1. /
