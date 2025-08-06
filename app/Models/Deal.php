@@ -10,4 +10,9 @@ class Deal extends Model
         "lead_id",
         "funded_amount"
     ];
+
+    public function lead()
+    {
+        return $this->belongsTo(Lead::class, "lead_id"); // relation to fetch lead details
+    }
 }

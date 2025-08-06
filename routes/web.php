@@ -11,4 +11,7 @@ Route::controller(BankStatementController::class)->group(function () {
 
 Route::prefix('api')->group(function () {
     Route::get('dashboard/summary', [DashboardController::class, 'index']);
+    Route::get('deals/merchents', [DashboardController::class, 'getDeals']);
+    Route::post('/merchant/{id}/upload-bank-statement', [BankStatementController::class,'store'])->name('statement.store');
+
 });
