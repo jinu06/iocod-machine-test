@@ -57,12 +57,11 @@ document.addEventListener("DOMContentLoaded", function () {
             );
         });
 
-        if(validFiles.length > FileLimt){
+        if (selectedFiles.length + validFiles.length > FileLimt) {
             showNotification(
-                `maximum ${FileLimt} is allowed`,
-                'error'
+                `Maximum ${FileLimt} files are allowed in total!`,
+                "error"
             );
-
             return;
         }
 
@@ -158,7 +157,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Form submit
     document
         .getElementById("upload-form")
-        .addEventListener("submit", function (e) {
+        .addEventListener("submit", async function (e) {
             e.preventDefault();
 
             if (isProcessing) return;
@@ -173,11 +172,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            simulateUpload();
+            await handleUpload();
         });
 
-    // Simulate upload
-    function simulateUpload() {
+    //  upload functionality
+    async function handleUpload() {
         if (isProcessing) return;
 
         isProcessing = true;
@@ -254,4 +253,32 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Initialize
     updateSubmitButton();
+
+    $("#merchant-select").select2({
+        ajax: {
+            url: "/api/deals/merchents",
+            dataType: "json",
+            delay: 250,
+            data: function (params) {
+                return {
+                    term: params.term || "", // search term
+                    page: params.page || 1,
+                };
+            },
+            processResults: function (data, params) {
+                params.page = params.page || 1;
+
+                return {
+                    results: data.results,
+                    pagination: {
+                        more: data.pagination.more,
+                    },
+                };
+            },
+            cache: true,
+        },
+        placeholder: "Select a Merchant",
+        minimumInputLength: 0, // minimum input length  if its change to > 0 the user must be add the count data
+        dropdownCssClass: "my-custom-select", // custom class for dropdown
+    });
 });
