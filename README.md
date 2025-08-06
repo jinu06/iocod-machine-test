@@ -27,14 +27,14 @@
 
 1. Run the following command to insert mock data:
    -> php artisan fund:deals
-    # This command will insert mock data from the JSON file located at storage/leads.json into the leads table.
-    # If a lead has a lead_score of 80 or higher, it will also be inserted into the deals table and marked as assigned.
+   This command will insert mock data from the JSON file located at storage/leads.json into the leads table.
+   If a lead has a lead_score of 80 or higher, it will also be inserted into the deals table and marked as assigned.
 2. Application Startup – Initial Page:
-    # Once the server is running, the initial page displays the Bank Statement Upload functionality.
-    # You can upload up to 4 bank statements.
-    # Only CSV or PDF file formats are accepted.
-    # The Merchant ID field is mandatory.
-    # The dropdown/select input for Merchant ID will show only the assigned leads from the deals table.
+   Once the server is running, the initial page displays the Bank Statement Upload functionality.
+   You can upload up to 4 bank statements.
+   Only CSV or PDF file formats are accepted.
+   The Merchant ID field is mandatory.
+   The dropdown/select input for Merchant ID will show only the assigned leads from the deals table.
 
 ## Routes Overview
 
