@@ -10,7 +10,7 @@
 1. Laravel
 2. Mysql
 
-## Installiation
+## Installation
 
 1. Clone the repository and set up the environment file:
    Copy .env.example and rename it to .env
