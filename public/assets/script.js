@@ -3,6 +3,11 @@ let isProcessing = false;
 const FileLimt = 4;
 
 document.addEventListener("DOMContentLoaded", function () {
+    $.ajaxSetup({
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+    }); // csrf token setup ajax functionality
     const uploadZone = document.getElementById("upload-zone");
     const fileInput = document.getElementById("file-input");
     const selectedFilesDiv = document.getElementById("selected-files");
@@ -176,33 +181,109 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
     //  upload functionality
+    // async function handleUpload() {
+    //     try {
+    //         if (isProcessing) return;
+
+    //         isProcessing = true;
+    //         submitBtn.disabled = true;
+    //         submitBtn.innerHTML =
+    //             '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+
+    //         const progressBars = document.querySelectorAll(".progress-fill");
+    //         let progress = 0;
+
+    //         const merchant = $("#merchant-select").val();
+
+    //         const URL = `/api/merchant/${merchant}/upload-bank-statement`;
+
+    //         const interval = setInterval(() => {
+    //             progress += Math.random() * 10 + 5;
+    //             if (progress > 100) progress = 100;
+
+    //             progressBars.forEach((bar) => {
+    //                 bar.style.width = progress + "%";
+    //             });
+
+    //             if (progress >= 100) {
+    //                 clearInterval(interval);
+    //                 setTimeout(() => {
+    //                     showNotification("Files uploaded successfully!");
+    //                     resetForm();
+    //                 }, 500);
+    //             }
+    //         }, 150);
+    //     } catch (error) {}
+    // }
+
     async function handleUpload() {
         if (isProcessing) return;
+
+        const merchant = $("#merchant-select").val();
+
+        const formData = new FormData();
+        for (let i = 0; i < selectedFiles.length; i++) {
+            formData.append("statements[]", selectedFiles[i]);
+        }
 
         isProcessing = true;
         submitBtn.disabled = true;
         submitBtn.innerHTML =
             '<i class="fas fa-spinner fa-spin"></i> Uploading...';
 
+        // Simulated progress
         const progressBars = document.querySelectorAll(".progress-fill");
         let progress = 0;
-
         const interval = setInterval(() => {
             progress += Math.random() * 10 + 5;
             if (progress > 100) progress = 100;
-
             progressBars.forEach((bar) => {
                 bar.style.width = progress + "%";
             });
-
-            if (progress >= 100) {
-                clearInterval(interval);
-                setTimeout(() => {
-                    showNotification("Files uploaded successfully!");
-                    resetForm();
-                }, 500);
-            }
         }, 150);
+
+        try {
+            const response = await new Promise((resolve, reject) => {
+                $.ajax({
+                    url: `/api/merchant/${merchant}/upload-bank-statement`,
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: resolve,
+                    error: reject,
+                });
+            });
+
+            clearInterval(interval);
+            progressBars.forEach((bar) => {
+                bar.style.width = "100%";
+            });
+
+            showNotification("Files uploaded successfully!", "success");
+            resetForm();
+            $("#merchant-select").val("").trigger("change");
+        } catch (error) {
+            clearInterval(interval);
+
+            if (error.status === 422) {
+                const errors = error.responseJSON?.errors || {};
+                for (let field in errors) {
+                    const message = errors[field][0];
+                    showNotification(message, "error");
+                }
+            } else {
+                showNotification(
+                    error.responseJSON?.message || "Upload failed",
+                    "error"
+                );
+            }
+            console.log(error);
+        } finally {
+            isProcessing = false;
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = "Upload Files";
+        }
     }
 
     // Reset form
@@ -232,7 +313,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         setTimeout(() => {
             notification.classList.remove("show");
-        }, 3000);
+        }, 6000); // after 6s it will be remove
     }
 
     // Format file size
