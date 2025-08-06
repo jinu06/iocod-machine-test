@@ -32,4 +32,32 @@ class DashboardController extends Controller
             ]
         ]);
     }
+
+    public function getDeals(Request $request)
+    {
+        $term = $request->input('term', '');
+        $page = $request->input('page', 1);
+
+        $limit = 40;
+        $offset = ($page - 1) * $limit;
+
+        $query = Deal::query()
+            ->with("lead")
+            ->when(
+                $term,
+                fn($q) =>
+                $q->whereRelation('lead', 'merchant_name', 'like', "%$term%")
+            )
+            ->orderBy('id', 'desc');
+
+        $results = $query->offset($offset)->limit($limit)->get();
+
+        return response()->json([
+            'results' => $results->map(fn($deal) => [
+                'id' => $deal->lead_id,
+                'text' => $deal->lead->merchant_name ?? 'Unknown',
+            ]),
+            'pagination' => ['more' => $results->count() === $limit], // checks about more data
+        ]);
+    }
 }
